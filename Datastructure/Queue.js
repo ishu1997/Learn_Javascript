@@ -2,35 +2,34 @@
 // used in browsers to set the order of execution
 
 class Queue {
-    queueSize = 0
-    list = [];
 
-    constructor(size = 0) {
-        this.queueSize = size;
+    #list = [];
+    #capacity;
+
+    constructor(capacity = 0) {
+        this.#capacity = Math.max(Number(capacity), 0) || null;
     }
 
-    enqueue(element) {
-        if (this.list.length <= this.queueSize) {
-            this.list.push(element);
+    get size() { return this.#list.length; }
+
+    get isEmpty() { return this.size == 0 }
+
+    get isFull() { return this.size === this.#capacity && this.#capacity !== null; }
+
+    enqueue(item) {
+        if (this.#capacity !== null && this.size < this.#capacity) {
+            return this.#list.push(item);
         }
-        else {
-            console.log("Queue is full");
-        }
+
+        return this.size;
     }
 
-    dequeue() {
-        if (this.list.length === 0) {
-            console.log("Queue is empty");
-        }
-        else {
-            var pop = this.list.shift();
-            console.log(`popped element ${pop}`);
-        }
-    }
+    dequeue() { return this.#list.shift(); }
 
-    print() {
-        console.log(this.list);
-    }
+    peek() { return this.#list[0]; }
+
+    print() { console.log(this.#list); }
+
 }
 
 var queue = new Queue(5);
@@ -43,7 +42,9 @@ queue.enqueue(6);
 queue.enqueue(7);
 queue.enqueue(8);
 queue.print();
-queue.dequeue();
-queue.dequeue();
-queue.dequeue();
+console.log(queue.dequeue());
+console.log(queue.dequeue());
+console.log(queue.dequeue());
 queue.print();
+console.log(queue.peek());
+
